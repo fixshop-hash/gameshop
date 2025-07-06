@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "name": "Isekai Sex Boutique",
+    "price": 99.99,
+    "image": "https://i.ibb.co/4ZG88hKt/Isekai-Sex-Boutique-Free-Download.png",
+    "description": "Windows 10+, Intel® Core™ i5 10th gen or above, 12 GB RAM, GeForce® GTX 960 4GB or above, Version 10, 5 GB available space",
+    "category": "Adult"
+  },
+  {
+    "id": "2",
+    "name": "GEX Trilogy",
+    "price": 49.99,
+    "image": "https://i.postimg.cc/tTdkh2xc/Gex-Trilogy-Free-Download.png",
+    "description": "Windows 10 64-bit, Core 2 Duo E7500, 4GB RAM, GTX 750, DirectX 11, 5GB free space.",
+    "category": "Action"
+  },
+  {
+    "id": "3",
+    "name": "Blasfemia",
+    "price": 199.99,
+    "image": "https://i.postimg.cc/NMPMPwm2/final-cover-with-logo-51-240x320.jpg",
+    "description": "Windows 10 (64-bit), 3GHz 4-Core or similar, 8 GB RAM, GeForce GTX 1060, 2 GB available space, undefined",
+    "category": "Horror"
+  },
+  {
+    "id": "4",
+    "name": "The Backrooms: Expedition ",
+    "price": 24.99,
+    "image": "https://i.postimg.cc/P5kq7ypy/final-cover-with-logo-38-240x320.jpg",
+    "description": "Windows 10 (64-bit), 3GHz 4-Core or similar, 8 GB RAM, GeForce GTX 1060, 2 GB available space, undefined",
+    "category": "Horror"
+  },
+  {
+    "id": "5",
+    "name": "Train Capacity 300% 2",
+    "price": 14.99,
+    "image": "https://i.postimg.cc/qRYJxxH8/final-cover-with-logo-55-240x320.jpg",
+    "description": "Windows® 10 64-bit, Intel® Core™ i5-4460 or AMD FX™-6300, 4 GB RAM, NVIDIA® GeForce® GTX 770 or AMD Radeon™ R9 Nano, Version 11, 5 GB available space",
+    "category": "Adult"
+  },
+  {
+    "id": "6",
+    "name": "Star Knightess Aura",
+    "price": 34.99,
+    "image": "https://i.postimg.cc/mZzCfdkW/final-cover-with-logo-72-240x320.jpg",
+    "description": "Microsoft Windows 8.1 (32bit/64bit), Intel N4100 (or similar) or better, 4 GB RAM, DirectX 9/OpenGL 4.1 capable GPU, Version 9.0c, 2 GB available space",
+    "category": "Adult"
+  }
+]

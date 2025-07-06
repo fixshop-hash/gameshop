@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GameShop - Cart</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <style>
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #6c63ff;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 5px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1000;
+    }
+    .notification.show {
+      opacity: 1;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 15px;
+    }
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+    .cart-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cart-item-info {
+      flex: 1;
+      padding: 0 20px;
+    }
+    .cart-item-info h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+    .cart-item-price {
+      font-weight: 600;
+      color: #6c63ff;
+    }
+    .cart-item-quantity {
+      display: flex;
+      align-items: center;
+    }
+    .cart-item-quantity button {
+      background-color: #f1f1f1;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .cart-item-quantity span {
+      margin: 0 15px;
+      font-weight: 600;
+    }
+    .cart-item-remove {
+      color: #dc3545;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      margin-left: 20px;
+    }
+    .empty-cart {
+      text-align: center;
+      padding: 50px 0;
+    }
+    .empty-cart p {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #6c757d;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo"><a href="index.html">GameShop</a></div>
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="shop.html">Shop</a></li>
+          <li><a href="cart.html" class="active"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></a></li>
+        </ul>
+      </nav>
+      <div class="mobile-menu"><i class="fas fa-bars"></i></div>
+    </div>
+  </header>
+
+  <section class="cart-section">
+    <div class="container">
+      <h1>Your Shopping Cart</h1>
+      <div class="cart-items" id="cart-items">
+        <div class="empty-cart">
+          <p>Your cart is empty</p>
+          <a href="shop.html" class="btn">Continue Shopping</a>
+        </div>
+      </div>
+      <div class="cart-summary" id="cart-summary" style="display: none;">
+        <div class="summary-details">
+          <h3>Order Summary</h3>
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="subtotal">$0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping</span>
+            <span>Free</span>
+          </div>
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="total">$0.00</span>
+          </div>
+          <button class="btn checkout-btn">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>About Us</h3>
+          <p>Trust GameShop.</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="cart.html">Cart</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Contact</h3>
+          <p>email@example.com</p>
+          <p>+1 (123) 456-7890</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2023 GameShop. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      updateCartDisplay();
+
+      const mobileMenuBtn = document.querySelector(".mobile-menu");
+      const nav = document.querySelector("nav");
+
+      if (mobileMenuBtn && nav) {
+        mobileMenuBtn.addEventListener("click", function () {
+          nav.classList.toggle("active");
+        });
+      }
+
+      // Attach WhatsApp checkout
+      const checkoutBtn = document.querySelector(".checkout-btn");
+      if (checkoutBtn) {
+        checkoutBtn.addEventListener("click", function () {
+          const cart = JSON.parse(localStorage.getItem("cart")) || [];
+          if (cart.length === 0) {
+            alert("Your cart is empty!");
+            return;
+          }
+
+          const phoneNumber = "94771481543"; // <- Replace with your WhatsApp number
+
+          let message = "*🛒 New Order from GameShop Checkout*%0A";
+          let total = 0;
+
+          cart.forEach((item, index) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            message += `%0A${index + 1}. *${item.name}* - Qty: ${item.quantity} - Rs.${item.price} x ${item.quantity} = Rs.${itemTotal}`;
+          });
+
+          message += `%0A%0A*Total: Rs.${total.toFixed(2)}*`;
+          message += `%0A%0A📍 Sent from GameShop Website`;
+
+          const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+          window.open(whatsappURL, "_blank");
+        });
+      }
+    });
+
+    function updateCartDisplay() {
+      const cartItemsContainer = document.getElementById("cart-items");
+      const cartSummary = document.getElementById("cart-summary");
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `
+          <div class="empty-cart">
+            <p>Your cart is empty</p>
+            <a href="shop.html" class="btn">Continue Shopping</a>
+          </div>
+        `;
+        cartSummary.style.display = "none";
+        updateCartCount();
+        return;
+      }
+
+      let itemsHTML = "";
+      let subtotal = 0;
+
+      cart.forEach((item) => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        itemsHTML += `
+          <div class="cart-item" data-id="${item.id}">
+            <div class="cart-item-image">
+              <img src="${item.image}" alt="${item.name}">
+            </div>
+            <div class="cart-item-info">
+              <h3>${item.name}</h3>
+              <p class="cart-item-price">$${item.price.toFixed(2)}</p>
+            </div>
+            <div class="cart-item-quantity">
+              <button class="decrease-quantity">-</button>
+              <span class="item-quantity">${item.quantity}</span>
+              <button class="increase-quantity">+</button>
+            </div>
+            <button class="cart-item-remove">&times;</button>
+          </div>
+        `;
+      });
+
+      cartItemsContainer.innerHTML = itemsHTML;
+
+      document.getElementById("subtotal").textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById("total").textContent = `$${subtotal.toFixed(2)}`;
+      cartSummary.style.display = "block";
+
+      setupCartEventListeners();
+      updateCartCount();
+    }
+
+    function setupCartEventListeners() {
+      document.querySelectorAll(".increase-quantity").forEach((button) => {
+        button.addEventListener("click", increaseQuantity);
+      });
+      document.querySelectorAll(".decrease-quantity").forEach((button) => {
+        button.addEventListener("click", decreaseQuantity);
+      });
+      document.querySelectorAll(".cart-item-remove").forEach((button) => {
+        button.addEventListener("click", removeItem);
+      });
+    }
+
+    function increaseQuantity(event) {
+      const cartItem = event.target.closest(".cart-item");
+      const itemId = cartItem.dataset.id;
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const itemIndex = cart.findIndex((item) => item.id === itemId);
+
+      if (itemIndex !== -1) {
+        cart[itemIndex].quantity += 1;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartDisplay();
+      }
+    }
+
+    function decreaseQuantity(event) {
+      const cartItem = event.target.closest(".cart-item");
+      const itemId = cartItem.dataset.id;
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const itemIndex = cart.findIndex((item) => item.id === itemId);
+
+      if (itemIndex !== -1) {
+        if (cart[itemIndex].quantity > 1) {
+          cart[itemIndex].quantity -= 1;
+        } else {
+          cart.splice(itemIndex, 1);
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartDisplay();
+      }
+    }
+
+    function removeItem(event) {
+      const cartItem = event.target.closest(".cart-item");
+      const itemId = cartItem.dataset.id;
+
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart = cart.filter((item) => item.id !== itemId);
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartDisplay();
+      showNotification("Item removed from cart");
+    }
+
+    function updateCartCount() {
+      const cartCountElements = document.querySelectorAll("#cart-count");
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+      cartCountElements.forEach((element) => {
+        element.textContent = totalItems;
+      });
+    }
+
+    function showNotification(message) {
+      const notification = document.createElement("div");
+      notification.className = "notification";
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add("show");
+      }, 10);
+
+      setTimeout(() => {
+        notification.classList.remove("show");
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
